@@ -110,3 +110,9 @@ If there are any conflicts, it will let you know that. You can grab other change
 Can do "Git Fetch" from CMD line instead to see copies of both files.
 
 Owner: Pull any changes whenever opening up project in RStudio again.
+
+Git commands to resolve conflicts:
+- git merge --abort
+- git checkout --theirs conflicted_file.Rmd
+- git checkout --ours conflicted_file.Rmd
+Then run "add, "commit" and "push" as normal.
