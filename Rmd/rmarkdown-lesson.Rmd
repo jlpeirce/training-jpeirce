@@ -76,3 +76,40 @@ bg_chem <- read.csv("../data/BGchem2008data.csv")
 ```{r, echo=FALSE}
 plot(bg_chem$CTD_Depth, bg_chem$CTD_Temperature)
 ```
+ 
+## Git and GitHUB
+
+I learned that you cannot use copy and paste keyboard commands in a Windows terminal window. You can right-click and choose paste or copy from the drop-down menu.
+
+## Archiving with GitHub
+
+- GitHub is not an archive.
+- Software Heritage - is an archive and makes it easty to archive from GitHub. Most relevant for software processes that will be useful for others independent of your data and R environment.
+- Arctic Data Center another place to archive data and code
+
+## Collaborating in GitHub repositories without Conflicts 5.3
+
+See appendix for info on sharing with "Pull Requests"
+For trusted colleagues can use direct sharing.
+
+Owner: in GitHub > Settings > Collaborators > Add People (know their username)
+
+Collaborator: Will receive email with link. 
+
+In GitHub: Go to Code button dropdown menu and under clone, choose copy
+
+In Rstudio: Create new project with Git
+
+If you make changes
+
+PULL before Commit (always wise)
+If there are any conflicts, it will let you know that. You can grab other changes and then merge your changes in the doc before you push your version,
+
+Can do "Git Fetch" from CMD line instead to see copies of both files.
+
+Owner: Pull any changes whenever opening up project in RStudio again.
+
+
+
+
+
