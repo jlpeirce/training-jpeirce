@@ -109,7 +109,3 @@ Can do "Git Fetch" from CMD line instead to see copies of both files.
 
 Owner: Pull any changes whenever opening up project in RStudio again.
 
-
-
-
-
