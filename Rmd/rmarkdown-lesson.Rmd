@@ -76,3 +76,7 @@ bg_chem <- read.csv("../data/BGchem2008data.csv")
 ```{r, echo=FALSE}
 plot(bg_chem$CTD_Depth, bg_chem$CTD_Temperature)
 ```
+ 
+## Git and GitHUB
+
+I learned that you cannot use copy and paste in a Windows terminal window.
