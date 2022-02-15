@@ -1,0 +1,78 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Header 1
+
+## Header 2
+
+### Header 3
+
+Write some **bold text**
+
+-   list item
+-   list item
+-   list item
+
+This is *italic text*
+
+1.  Item 1
+
+2.  Item 2
+
+3.  Item 3
+
+    -   Item 3a
+    -   Item 3b
+
+### Help Docs
+
+Help > Markdown Quick Reference
+Help > Cheet Sheets > Markdown Cheat Sheet (more compact PDF format)
+    
+### Shortcuts for creating code chunk and     
+
+Mac shortcut for R code chunk: cmd + option + i
+PC shortcut: Ctrl + Alt + i
+
+```{r}
+x <- 3 + 2
+```
+
+### Shortcuts for running code chunk 
+
+Running an R chunk:
+Mac: 
+PC: Ctrl + enter (can run individual expressions - 1 line at a time)
+If you use Play button or Run menu it runs the whole code chunk 
+
+```{r}
+y <- 5 - 3
+y + 10
+```
+## Read in data
+
+1. create data folder
+1. upload data file
+1. create R chunk as below and type in read.csv
+1. use tabs to see autofill options
+
+```{r}
+bg_chem <- read.csv("../data/BGchem2008data.csv")
+```
+
+
+
+
+## Analysis
+
+## Plots
+
+```{r, echo=FALSE}
+plot(bg_chem$CTD_Depth, bg_chem$CTD_Temperature)
+```
