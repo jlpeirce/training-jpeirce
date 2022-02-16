@@ -116,3 +116,14 @@ Git commands to resolve conflicts:
 - git checkout --theirs conflicted_file.Rmd
 - git checkout --ours conflicted_file.Rmd
 Then run "add, "commit" and "push" as normal.
+
+## Publishing using GitHub Pages
+
+- Can use blogdown and hugo theme to do a whole website (example: https://www.nceas.ucsb.edu/learning-hub/courses)
+- Use bookdown to create a book published on GitHub Pages
+
+To suppress code chunks on the page use echo = FALSE
+```{r echo = FALSE}
+
+```
+
