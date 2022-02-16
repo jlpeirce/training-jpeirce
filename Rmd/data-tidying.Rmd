@@ -1,0 +1,149 @@
+---
+title: "Data Tidying"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Best practice is to put all library calls in same R chunk and up front.
+
+The order in which you order your libraries matters.
+
+```{r message = FALSE,warning=FALSE}
+library(dplyr)
+library(tidyr)
+library(readr)
+```
+
+Other functions you may use:
+
+- package_name::function eg dplyr::filter 
+- install.packages("dplyr")
+
+## Keyboard shortcuts 
+
+R code chunk:
+- cmd + option + i (Mac)
+- ctrl + alt + i (PC)
+
+Pipe operator
+- Ctrl + Shift + M (PC)
+
+Hints:
+- read_csv() is a bit smarter and more efficient than - read.csv and gives you a readout
+
+```{r}
+catch_original <- read_csv("https://knb.ecoinformatics.org/knb/d1/mn/v2/object/df35b.302.1")
+```
+## Clean data
+
+- drop All and notes cols using select (or select -colname to drop)
+
+```{r}
+catch_data <- catch_original %>% 
+  # select(Region, Year, Chinook, Coho, Pink, Chum, Sockeye)
+  select(-All, -notesRegCode)
+
+head(catch_data)
+
+summary(catch_data)
+```
+ - change Chinook from character to numeric type
+```{r}
+catch_clean <- catch_data %>% 
+  mutate(Chinook = if_else(Chinook == "I", "1", Chinook)) %>% 
+  mutate(Chinook = as.numeric(Chinook))
+
+head(catch_clean)
+
+summary(catch_clean)
+```
+### finding spurious characters in Chinook col
+- which function returns a value for which an argument is true.
+
+```{r}
+i <- which(is.na(catch_clean$Chinook))
+           i
+catch_original[i, ]           
+```
+## Reshaping data (wide to long)
+- move from wide to long format
+
+```{r}
+catch_long <- catch_clean %>% 
+  pivot_longer(cols = c(-Region, -Year), names_to = "Species", values_to = "Catch")
+head(catch_long)
+```
+```{r}
+catch_wide <- catch_long %>% 
+  pivot_wider(names_from = Region, values_from = Catch)
+
+head(catch_wide)
+```
+
+Hints:
+- If column names exist (as in names_from and values_from), call them directly (without quotes) as variables.
+- If column names are new (as in names_to and values_to), you need to call them with quotes since you are creating them
+- Can use rename function (takes same args as mutate() function) to rename col heads
+
+```{r}
+catch_long <- catch_clean %>% 
+  pivot_longer(cols = c(-Region, -Year), names_to = "Species", values_to = "Catch") %>% 
+  rename(catch_thousands = Catch)
+
+catch_long <- catch_long %>% 
+  mutate(catch = catch_thousands * 1000) %>% 
+  select(-catch_thousands) #hide catch_thousands column
+
+head(catch_long)
+```
+
+
+## Split-Apply-Combine
+
+- mean catch by region
+
+```{r}
+mean_region <- catch_long %>% 
+  group_by(Region, Species) %>% 
+  summarise(catch_mean = mean(catch), n=n(), .groups = "drop") #try also without .groups = "drop"
+
+head(mean_region)
+```
+ - add a filter argument (same as subset in tidyverse)
+
+```{r}
+mean_region <- catch_long %>% 
+  filter(Species == "Sockeye") %>% 
+  group_by(Region, Species) %>% 
+  summarise(catch_mean = mean(catch), n=n(), .groups = "drop") #try also without .groups = "drop"
+
+head(mean_region)
+```
+### Joins
+
+- implement a left join
+- often a necessary step, esp. with normalized data
+
+```{r}
+region_defs <- read.csv("https://knb.ecoinformatics.org/knb/d1/mn/v2/object/df35b.303.1") %>% 
+    select(code, mgmtArea)
+
+head(region_defs)
+```
+
+```{r}
+catch_joined <- left_join(catch_long, region_defs, by = c("Region" = "code")) #because no common col names you have to include "by" arg and put col names in "" here. These are also case specific.
+
+head(catch_joined)
+```
+- to check if number of rows is the same in both
+
+```{r}
+catch_joined <- left_join(catch_long, region_defs, by = c("Region" = "code")) 
+
+nrow(catch_joined) == nrow(catch_long) #should return TRUE (it does)
+```
+
