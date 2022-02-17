@@ -17,7 +17,10 @@ fahr_to_celsius <- function(fahr){
   
 #need to Run the function in order to load it into library and environment
 
+#test it
 celsius4 <- fahr_to_celsius(airtemps[1])
+
+#should return TRUE
 celsius1 == celsius4
 
 airtemps_c <-  fahr_to_celsius(fahr = airtemps) #explicit call
@@ -26,7 +29,7 @@ airtemps_c <-  fahr_to_celsius(fahr = airtemps) #explicit call
 
 airtemps_c <-  fahr_to_celsius(airtemps) #implicit call
 
-
+#Documenting Functions:
 #From CODE menu, insert Roxygen Skeleton. Note cursor needs to be in the name of a function or highlight the whole function
 #' Title
 #'
@@ -36,15 +39,18 @@ airtemps_c <-  fahr_to_celsius(airtemps) #implicit call
 #' @export
 #'
 #' @examples
+
 celsius_to_fahr <- function(celsius){
-  fahr <-  (celsius*5/9 + 32)
+  fahr <-  (celsius*9/5 + 32)
   return(fahr)
 }
 
 airtemps_f <- celsius_to_fahr(airtemps_c)
-fahr
-#^^^^^^need to finish exercise here^^^^^^
 
+#test it
+fahr4 <- celsius_to_fahr(airtemps_c[1])
+
+#Make a more robust function
 convert_temps <-  function(fahr){
   celsius <- (fahr - 32)*5/9
   kelvin <-  celsius + 273.15
