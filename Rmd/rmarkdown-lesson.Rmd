@@ -126,4 +126,3 @@ To suppress code chunks on the page use echo = FALSE
 ```{r echo = FALSE}
 
 ```
-

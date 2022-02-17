@@ -17,6 +17,11 @@ library(ggplot2)
 library(DT)
 library(scales) #install.packages("scales")
 ```
+## ggPlot
+
+- ggplot is part of tidyr package
+
+## Publication Graphics
 
 - Load data directly from KNB Data Repository
 
