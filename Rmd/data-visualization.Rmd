@@ -17,12 +17,6 @@ library(ggplot2)
 library(DT)
 library(scales) #install.packages("scales")
 ```
-## ggPlot
-
-- ggplot is part of tidyr package
-
-## Publication Graphics
-
 - Load data directly from KNB Data Repository
 
 ```{r}
@@ -52,8 +46,79 @@ annual_esc <- esc %>%
 
 head(annual_esc)
 ```
-```{r}
+## ggPlot
 
+- ggplot is part of tidyr package
+- think of aes as "axes"
+
+
+```{r}
+ggplot(annual_esc, mapping = aes(x = Species, y = escapement, fill = SASAP.Region)) + 
+geom_col(position = "stack") #stack is default, so is not needed, but you could do position = "dodge" for side-by-side columns
+
+```
+- Kodiak Escapement
+
+```{r}
+kodiak_esc <- annual_esc %>% 
+  filter(SASAP.Region == "Kodiak")
+
+head(kodiak_esc)
+```
+
+```{r}
+my_theme <-  theme_bw() +
+  theme(legend.position = "bottom",
+  #axis.ticks.x = "element_ something or other...here"
+  )
+
+ggplot(kodiak_esc, aes (x = Year, y = escapement, color = Species)) +
+  geom_point() +
+  geom_line() +
+  scale_y_continuous(labels = comma, n.breaks = 3) +
+  ylab("Escapement (num fish)") +
+  ggtitle("Kodiak Escapement") +
+  theme_bw() + #gets rid of gray background
+  #scale_color_brewer(palette("Dark2")) +
+  #theme(legend.position = "bottom")
+  my_theme #call your theme preferences object
+
+```
+
+- You can save your preferred theme object for reuse.
+-- good article on misuse of color: https://www.nature.com/articles/s41467-020-19160-7
+
+## Leaflet function (also look at patchwork and facet_wrap)
+
+```{r}
+locations <- esc %>% 
+  distinct(Location, Latitude, Longitude) %>% 
+  drop_na()
+```
+
+```{r}
+leaflet(locations) %>% 
+  addTiles() %>% 
+  addMarkers(lng = ~Longitude, lat = ~Latitude, popup = ~ Location)
+```
+
+```{r}
+leaflet(locations) %>% 
+  addWMSTiles("https://www.gebco.net/data_and_products/gebco_web_services/web_map_service/mapserv?",
+              layers = 'GEBCO_LATEST',
+              attribution = "Imagery reproduced from the GEBCO_2014 Grid, version 20150318, www.gebco.net") %>%
+  addCircleMarkers(lng = ~Longitude,
+                   lat = ~Latitude,
+                   popup = ~ Location,
+                   radius = 5,
+                   # set fill properties
+                   fillColor = "salmon",
+                   fillOpacity = 1,
+                   # set stroke properties
+                   stroke = T,
+                   weight = 0.5,
+                   color = "white",
+                   opacity = 1)
 ```
 
 
