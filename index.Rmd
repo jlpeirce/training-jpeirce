@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Research Projects
 - [Markdown Lesson](Rmd/rmarkdown-lesson.html)
 - [Data Tidying](Rmd/data-tidying.html)
+- [Data Visualization](Rmd/data-visualization.Rmd)
 
 ## Here's an image
 
