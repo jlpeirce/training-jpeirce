@@ -102,7 +102,7 @@ head(nest_pred)
 ```{r}
 ggplot(nest_pred, aes(x = pred_count, y = total_predated)) + 
   geom_point() +
-  facet_wrap(~common_name, scales = "free_y", ncol = 2) +
+  facet_wrap(~common_name, scales = "free", ncol = 4) +
   labs(x = "Number of Predators", y = "Number of Eggs Predated") + 
   theme_bw()
 ```
