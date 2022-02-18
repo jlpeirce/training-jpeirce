@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 - [Markdown Lesson](Rmd/rmarkdown-lesson.html)
 - [Data Tidying](Rmd/data-tidying.html)
 - [Data Visualization](Rmd/data-visualization.html)
-- [Data Cleaning and Manipulation Challenge](Rmd/cleanning-manipulation-data.html)
+- [Data Cleaning and Manipulation Challenge](Rmd/cleaning-manipulation-data.html)
 
 
 ![](images/agcLogo132x141.png)
