@@ -1,0 +1,103 @@
+---
+title: "Untitled"
+author: "Jana Peirce"
+date: "2/18/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, warning = FALSE, message = FALSE}
+library(sf)
+library(ggplot2)
+library(leaflet)
+library(scales)
+library(ggmap)
+library(dplyr)
+```
+
+```{r}
+ak_regions <- read_sf("shapefiles/ak_regions_simp.shp")
+
+plot(ak_regions) 
+```
+```{r}
+class(ak_regions)
+```
+
+```{r}
+head(ak_regions)
+```
+```{r}
+ak_regions_3338 <- ak_regions %>% #use pipe because SF is part of tidyverse/dplyr
+  st_transform(crs = 3338)
+
+st_crs(ak_regions_3338)#this is a good CRS projection for AK
+```
+
+```{r}
+plot(ak_regions_3338)
+```
+```{r}
+ak_regions_3338 %>%
+  select(region)
+```
+
+```{r}
+pop <- read.csv("../shapefiles/alaska_population.csv")
+
+head(pop)
+```
+
+```{r}
+class(pop)
+```
+- Do a spatial join using st_join() - look at documentation for st_join for other joins
+```{r}
+pop_4326 <- st_as_sf(pop, 
+                  coords = c('lng', 'lat'),
+                  crs = 4326, #4236 is WGS84. You have to read in the data in the format it's in and then transform it. You cannot just assign it a diff CRS (such as 3338)
+                  remove = F)
+
+head(pop_4326)
+class(pop_4326)
+```
+- Oops an error! Because they use differnt projections
+
+```{r}
+pop_joined <- st_join(pop_4326, ak_regions_3338, join = st_within)
+```
+
+```{r}
+pop_3338 <- st_transform(pop_4326, crs = 3338)
+
+head(pop_3338)
+```
+```{r}
+pop_joined <- st_join(pop_3338, ak_regions_3338, join = st_within)
+
+head(pop_joined)
+```
+- we can drop geometries now, since we no longer need it. But since GEOMETRIES are sticky you need to unstick it using "as.data.frame" to convert if from SF table to normal dataframe
+
+```{r}
+pop_region <- pop_joined %>% 
+  as.data.frame() %>% 
+  group_by(region) %>% 
+  summarise(total_pop = sum(population))
+
+head(pop_region)
+```
+
+- Do a regular left_join to add the total_pop to the original map talbe
+
+```{r}
+pop_region_3338 <- left_join(ak_regions_3338, pop_region)
+
+#joining by region
+
+plot(pop_region_3338["total_pop"])
+```
+
