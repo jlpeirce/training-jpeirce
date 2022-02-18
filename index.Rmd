@@ -15,6 +15,5 @@ knitr::opts_chunk$set(echo = TRUE)
 - [Data Visualization](Rmd/data-visualization.html)
 - [Data Cleaning and Manipulation Challenge](Rmd/cleanning-manipulation-data.html)
 
-## Here's an image
 
-![AGC Logo](images/agcLogo132x141.png)
+![](images/agcLogo132x141.png)
