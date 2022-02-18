@@ -1,0 +1,109 @@
+---
+title: "cleaning-manipulating-data"
+author: "Jana Peirce"
+date: "2/17/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message = FALSE}
+library(rvest)
+library(readr)
+library(dplyr)
+library(janitor)
+library(ggplot2)
+```
+
+```{r}
+pred <- read.csv("../data/Utqiagvik_predator_surveys.csv")
+
+head(pred)
+```
+
+```{r}
+nests <- read.csv("../data/Utqiagvik_nest_data.csv")
+
+head(nests)
+```
+
+```{r}
+webpage <- read_html("https://www.pwrc.usgs.gov/bbl/manual/speclist.cfm")
+
+tbls <- html_nodes(webpage, "table") %>% 
+    html_table(fill = TRUE)
+
+species <- tbls[[1]] %>% #why is the 1 in double brackets and what does it refer to
+    clean_names() %>% 
+    select(alpha_code, common_name) %>% 
+    mutate(alpha_code = tolower(alpha_code))
+```
+
+```{r}
+head(species)
+```
+
+#```{r} did not work - can't find alpha_code
+#join_spec <- left_join(pred_species, species, by = c("species", "alpha_code"))
+#join_spec
+#```
+
+```{r}
+assign_species_name <-  function(df, species){
+ return_df <- left_join(df, species, by = c("species" = "alpha_code"))
+  return(return_df)
+}
+```
+
+#did not work - still can't find "alpha_code"
+```{r}
+pred_species <- assign_species_name(pred, species) %>% 
+  group_by(year, common_name) %>% 
+  summarise(pred_count = sum(count, na.rm = T), .groups = "drop") %>% 
+  filter(!is.na(common_name))
+
+pred_species
+```
+
+```{r}
+ggplot(pred_species, aes(x = year, y = pred_count, color = common_name))+
+  geom_line() +
+  geom_point() +
+  ggtitle("Predator Species Count") +
+  ylab("predation count") +
+  theme_bw()
+```
+
+```{r}
+nests_species <- assign_species_name(nests, species) %>% 
+  group_by(common_name, year) %>% 
+  summarise(total_predated = sum(number_eggs_predated, na.rm = T), .groups = "drop") %>% 
+  filter(!is.na(common_name))
+
+head(nests_species)
+```
+
+```{r}
+pred_total <- pred_species %>% 
+  group_by(year) %>% 
+  summarise(pred_count = sum(pred_count, na.rm = T), .groups = "drop")
+
+head(pred_total)
+```
+
+```{r}
+nest_pred <- left_join(nests_species, pred_total, by = "year")
+
+head(nest_pred)
+```
+ 
+```{r}
+ggplot(nest_pred, aes(x = pred_count, y = total_predated)) + 
+  geom_point() +
+  facet_wrap(~common_name, scales = "free_y", ncol = 2) +
+  labs(x = "Number of Predators", y = "Number of Eggs Predated") + 
+  theme_bw()
+```
+
