@@ -19,7 +19,7 @@ library(dplyr)
 ```
 
 ```{r}
-ak_regions <- read_sf("shapefiles/ak_regions_simp.shp")
+ak_regions <- read_sf("../shapefiles/ak_regions_simp.shp")
 
 plot(ak_regions) 
 ```
