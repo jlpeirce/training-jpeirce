@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Geospatial Vector Analysis and Mapping"
 author: "Jana Peirce"
 date: "2/18/2022"
 output: html_document
@@ -64,7 +64,7 @@ pop_4326 <- st_as_sf(pop,
 head(pop_4326)
 class(pop_4326)
 ```
-- Oops an error! Because they use differnt projections
+- Oops an error! Because they use different projections
 
 ```{r}
 pop_joined <- st_join(pop_4326, ak_regions_3338, join = st_within)
