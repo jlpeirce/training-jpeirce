@@ -14,6 +14,6 @@ knitr::opts_chunk$set(echo = TRUE)
 - [Data Tidying](Rmd/data-tidying.html)
 - [Data Visualization](Rmd/data-visualization.html)
 - [Data Cleaning and Manipulating Data Challenge](Rmd/cleaning-manipulating-data.html)
-
+- [Geospatial Vector Analysis - maps with ggmap and leaflet](Rmd/geospatial-vector-analysis.html)
 
 ![](images/agcLogo132x141.png)
